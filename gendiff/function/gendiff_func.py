@@ -11,7 +11,8 @@ def form_diff_dict():
     return diff_dict
 
 
-def fill_diff_dict(key1, keys2, dict1, dict2, diff_dict):
+def fill_diff_dict(key1, dict1, dict2, diff_dict):
+    keys2 = list(dict2.keys())
     if key1 in keys2 and dict1[key1] == dict2[key1]:
         get_no_change(diff_dict).update({key1: dict1[key1]})
     elif (key1 in keys2 and dict1[key1] != dict2[key1]
@@ -31,7 +32,7 @@ def diff(dict1, dict2):
     keys1 = list(dict1.keys())
     keys2 = list(dict2.keys())
     for k in keys1:
-        fill_diff_dict(k, keys2, dict1, dict2, diff_dict)
+        fill_diff_dict(k, dict1, dict2, diff_dict)
     for k in keys2:
         if k not in keys1:
             get_add(diff_dict).update({k: dict2[k]})
