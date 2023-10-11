@@ -1,0 +1,11 @@
+# игнорирование директории .venv
+.venv/
+
+# игнорирование кэш
+__pycache__
+.pytest_cache/
+
+# ignore 
+dist/
+.coverage
+coverage.xml
