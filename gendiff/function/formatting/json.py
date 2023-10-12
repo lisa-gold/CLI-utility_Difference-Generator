@@ -31,4 +31,5 @@ def style_json_dict(diff_dict):
 
 def style_json(diff_dict):
     string = str(style_json_dict(diff_dict))
+    string = string.replace("'", '"')
     return string
