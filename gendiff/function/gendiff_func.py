@@ -58,6 +58,9 @@ def get_inner_change(dictionary):
 
 # Opening and formatting
 def generate_diff(file_path1, file_path2, formatting='stylish'):
+    """
+    This function generates differance between two files in a choosen format
+    """
     dict1 = open_file_as_dict(file_path1)
     dict2 = open_file_as_dict(file_path2)
     diff_dict = diff(dict1, dict2)
