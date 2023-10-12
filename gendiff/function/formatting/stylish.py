@@ -55,6 +55,19 @@ def style_inner_change(value, key, level):
     return string
 
 
+def allocate_lines(k, v, diff_dict, level):
+    string = ''
+    if k in generate_diff_func.get_no_change(diff_dict).keys():
+        string += form_line(k, v, ' ', level)
+    if k in generate_diff_func.get_add(diff_dict).keys():
+        string += form_line(k, v, '+', level)
+    if k in generate_diff_func.get_sub(diff_dict).keys():
+        string += form_line(k, v, '-', level)
+    if k in generate_diff_func.get_inner_change(diff_dict).keys():
+        string += style_inner_change(v, k, level)
+    return string
+
+
 def style(diff_dict):
     diff_dict_sorted = sort_alph(diff_dict)
     bracket_close = '}'
@@ -62,13 +75,6 @@ def style(diff_dict):
     level = 1
     for k, val in diff_dict_sorted.items():
         v = special_values(val)
-        if k in generate_diff_func.get_no_change(diff_dict).keys():
-            string += form_line(k, v, ' ', level)
-        if k in generate_diff_func.get_add(diff_dict).keys():
-            string += form_line(k, v, '+', level)
-        if k in generate_diff_func.get_sub(diff_dict).keys():
-            string += form_line(k, v, '-', level)
-        if k in generate_diff_func.get_inner_change(diff_dict).keys():
-            string += style_inner_change(v, k, level)
+        string += allocate_lines(k, v, diff_dict, level)
     string += bracket_close
     return string

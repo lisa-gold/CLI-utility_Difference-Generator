@@ -2,7 +2,8 @@ import json
 from gendiff.generate_diff_func import generate_diff
 from gendiff.tests.fixtures.correct_results import (
     test_generate_diff_exp, test_generate_diff_the_same_file_exp,
-    test_generate_diff_nested_exp, test_plain_style_exp)
+    test_generate_diff_nested_exp, test_plain_style_exp,
+    test_json_style_exp)
 
 
 ADDRESS = 'gendiff/tests/fixtures/'
@@ -50,9 +51,8 @@ def test_generate_diff_plain(test_plain_style_exp):
     assert diff == test_plain_style_exp
 
 
-def test_generate_diff_json():
+def test_generate_diff_json(test_json_style_exp):
     # Check if function generate_diff works correctly
     diff = generate_diff(
         ADDRESS + 'file1.json', ADDRESS + 'file2.json', 'json')
-    correct_res = json.load(open('gendiff/tests/fixtures/correct_result.json'))
-    assert diff == correct_res
+    assert diff == test_json_style_exp
