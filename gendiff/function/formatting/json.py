@@ -1,4 +1,4 @@
-from gendiff.function import gendiff_func
+from gendiff import generate_diff
 from gendiff.function.formatting import stylish
 
 

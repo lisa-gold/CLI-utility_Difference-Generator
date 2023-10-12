@@ -1,5 +1,5 @@
 from gendiff.function.formatting import stylish
-from gendiff.function import gendiff_func
+from gendiff import generate_diff
 
 
 # Formater - plain
