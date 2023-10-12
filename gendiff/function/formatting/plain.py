@@ -1,5 +1,5 @@
 from gendiff.function.formatting import stylish
-from gendiff import generate_diff
+from gendiff import generate_diff_func
 
 
 # Formater - plain
@@ -33,12 +33,12 @@ def style_plain_main(diff_dict):
     string = ''
     for k, val in diff_dict_sorted.items():
         v = modify_according_to_type(val)
-        if k in generate_diff.get_add(diff_dict).keys():
+        if k in generate_diff_func.get_add(diff_dict).keys():
             v = is_dict_exchange(v)
             string += f"Property '{k}' was added with value: {v}\n"
-        if k in generate_diff.get_sub(diff_dict).keys():
+        if k in generate_diff_func.get_sub(diff_dict).keys():
             string += f"Property '{k}' was removed\n"
-        if k in generate_diff.get_inner_change(diff_dict).keys():
+        if k in generate_diff_func.get_inner_change(diff_dict).keys():
             if not isinstance(v, dict):
                 v_inner0 = modify_according_to_type(v[0])
                 v_inner1 = modify_according_to_type(v[1])
