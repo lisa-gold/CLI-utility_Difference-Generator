@@ -1,3 +1,4 @@
+import json
 from gendiff import generate_diff_func
 from gendiff.function.formatting import stylish
 
@@ -30,6 +31,5 @@ def style_json_dict(diff_dict):
 
 
 def style_json(diff_dict):
-    string = str(style_json_dict(diff_dict))
-    string = string.replace("'", '"')
+    string = json.dumps(style_json_dict(diff_dict))
     return string
