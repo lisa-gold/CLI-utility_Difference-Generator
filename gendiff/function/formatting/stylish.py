@@ -27,7 +27,9 @@ def form_line(key, current_dict, symbol, level):
     bracket = '{'
     bracket_close = '}'
     line = ''
-    if not isinstance(current_dict, dict):
+    if current_dict == '':
+        line += f'{"  " * level}{symbol} {key}:\n'
+    elif not isinstance(current_dict, dict):
         line += f'{"  " * level}{symbol} {key}: {current_dict}\n'
     else:
         line += f'{"  " * level}{symbol} {key}: {bracket}\n'

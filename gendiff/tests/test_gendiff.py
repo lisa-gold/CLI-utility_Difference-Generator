@@ -1,4 +1,3 @@
-import json
 from gendiff.generate_diff_func import generate_diff
 from gendiff.tests.fixtures.correct_results import (
     test_generate_diff_exp, test_generate_diff_the_same_file_exp,

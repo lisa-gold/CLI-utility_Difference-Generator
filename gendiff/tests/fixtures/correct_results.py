@@ -38,7 +38,7 @@ def test_generate_diff_nested_exp():
         }
         setting6: {
             doge: {
-              - wow: 
+              - wow:
               + wow: so much
             }
             key: value
