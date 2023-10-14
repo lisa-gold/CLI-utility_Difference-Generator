@@ -1,14 +1,14 @@
+## Project #2. Difference generator
+
 ### Hexlet tests and linter status:
-[![Actions Status](https://github.com/lisa-gold/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions)
+[![Actions Status](https://github.com/lisa-gold/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions) [![Python CI](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml)
 
-### CodeClimate
-[![Maintainability](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/maintainability)](https://codeclimate.com/github/lisa-gold/python-project-50/maintainability)
+### CodeClimate and  Test Coverage
+[![Maintainability](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/maintainability)](https://codeclimate.com/github/lisa-gold/python-project-50/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/test_coverage)](https://codeclimate.com/github/lisa-gold/python-project-50/test_coverage)
 
-### Test Coverage
-[![Test Coverage](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/test_coverage)](https://codeclimate.com/github/lisa-gold/python-project-50/test_coverage)
-
-### Python CI
-[![Python CI](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml)
+### Description
+This is a CLI utility that shows differences between two files in three various formats.
+To apply it use gendiff file_path1 file_path2 -f format_needed.
 
 ### This project was build using these tools:
 | Tool                                                                        | Description                                             |

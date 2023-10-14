@@ -1,7 +1,7 @@
 from gendiff import generate_diff_func
 
 
-def special_values(value):
+def transform_special_values(value):
     if value in [True, False]:
         new_value = str(value).lower()
     elif value is None:
@@ -43,8 +43,8 @@ def style_inner_change(value, key, level):
     bracket_close = '}'
     string = ''
     if not isinstance(value, dict):
-        v_inner0 = special_values(value[0])
-        v_inner1 = special_values(value[1])
+        v_inner0 = transform_special_values(value[0])
+        v_inner1 = transform_special_values(value[1])
         string += form_line(key, v_inner0, '-', level)
         string += form_line(key, v_inner1, '+', level)
     else:
@@ -74,7 +74,7 @@ def style(diff_dict):
     string = '{\n'
     level = 1
     for k, val in diff_dict_sorted.items():
-        v = special_values(val)
+        v = transform_special_values(val)
         string += allocate_lines(k, v, diff_dict, level)
     string += bracket_close
     return string

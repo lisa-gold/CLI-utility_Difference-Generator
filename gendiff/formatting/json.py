@@ -1,9 +1,9 @@
 import json
 from gendiff import generate_diff_func
-from gendiff.function.formatting import stylish
+from gendiff.formatting import stylish
 
 
-def inner_style(key, inner_dict, file_json):
+def style_inner(key, inner_dict, file_json):
     if not isinstance(inner_dict, dict):
         temp_dict1 = {f'- {key}': inner_dict[0]}
         temp_dict2 = {f'+ {key}': inner_dict[1]}
@@ -26,7 +26,7 @@ def style_json_dict(diff_dict):
             temp_dict = {f'- {k}': v}
             file_json.update(temp_dict)
         if k in generate_diff_func.get_inner_change(diff_dict).keys():
-            inner_style(k, v, file_json)
+            style_inner(k, v, file_json)
     return file_json
 
 

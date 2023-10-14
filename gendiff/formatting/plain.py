@@ -1,11 +1,11 @@
-from gendiff.function.formatting import stylish
+from gendiff.formatting import stylish
 from gendiff import generate_diff_func
 
 
 # Formater - plain
 def modify_according_to_type(value):
-    if value != stylish.special_values(value):
-        value_mod = stylish.special_values(value)
+    if value != stylish.transform_special_values(value):
+        value_mod = stylish.transform_special_values(value)
     elif not isinstance(value, str):
         value_mod = value
     else:
@@ -13,7 +13,7 @@ def modify_according_to_type(value):
     return value_mod
 
 
-def is_dict_exchange(object, value='[complex value]'):
+def exchange_if_dict(object, value='[complex value]'):
     if isinstance(object, dict):
         return value
     else:
@@ -34,7 +34,7 @@ def style_plain_main(diff_dict):
     for k, val in diff_dict_sorted.items():
         v = modify_according_to_type(val)
         if k in generate_diff_func.get_add(diff_dict).keys():
-            v = is_dict_exchange(v)
+            v = exchange_if_dict(v)
             string += f"Property '{k}' was added with value: {v}\n"
         if k in generate_diff_func.get_sub(diff_dict).keys():
             string += f"Property '{k}' was removed\n"
@@ -42,8 +42,8 @@ def style_plain_main(diff_dict):
             if not isinstance(v, dict):
                 v_inner0 = modify_according_to_type(v[0])
                 v_inner1 = modify_according_to_type(v[1])
-                v_inner0 = is_dict_exchange(v_inner0)
-                v_inner1 = is_dict_exchange(v_inner1)
+                v_inner0 = exchange_if_dict(v_inner0)
+                v_inner1 = exchange_if_dict(v_inner1)
                 string += (f"Property '{k}' was updated. \
 From {v_inner0} to {v_inner1}\n")
             else:
