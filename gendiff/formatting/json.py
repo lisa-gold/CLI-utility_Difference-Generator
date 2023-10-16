@@ -31,5 +31,5 @@ def style_json_dict(diff_dict):
 
 
 def style_json(diff_dict):
-    string = json.dumps(style_json_dict(diff_dict))
+    string = json.dumps(diff_dict)
     return string

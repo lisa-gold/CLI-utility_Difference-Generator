@@ -4,7 +4,7 @@
 [![Actions Status](https://github.com/lisa-gold/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions) [![Python CI](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml/badge.svg)](https://github.com/lisa-gold/python-project-50/actions/workflows/pyci.yml)
 
 ### CodeClimate and  Test Coverage
-[![Maintainability](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/maintainability)](https://codeclimate.com/github/lisa-gold/python-project-50/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/d09837afbd6c423299cf/test_coverage)](https://codeclimate.com/github/lisa-gold/python-project-50/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/73ef8ce3d907c9b728af/maintainability)](https://codeclimate.com/github/lisa-gold/python-project-50/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/73ef8ce3d907c9b728af/test_coverage)](https://codeclimate.com/github/lisa-gold/python-project-50/test_coverage)
 
 ### Description
 This is a CLI utility that shows differences between two files in three various formats.
