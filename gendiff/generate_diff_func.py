@@ -1,4 +1,4 @@
-from gendiff.open_files import open_file
+from gendiff.file_opener import open_file
 from gendiff.formatting import format
 
 
@@ -64,10 +64,6 @@ def generate_diff(file_path1, file_path2, formatting='stylish'):
     """
     dict1 = open_file(file_path1)
     dict2 = open_file(file_path2)
-    if not isinstance(dict1, dict) or not isinstance(dict2, dict):
-        if not isinstance(dict1, dict):
-            return dict1
-        return dict2
     diff_dict = fill_diff(dict1, dict2)
     result = format.apply_format(diff_dict, formatting)
     return result
