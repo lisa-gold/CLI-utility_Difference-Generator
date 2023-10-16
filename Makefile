@@ -12,3 +12,6 @@ lint: # run linter flake8
 
 test: # run tests
 	poetry run pytest
+
+test-coverage: # form test-coverage report
+	coverage report -m
