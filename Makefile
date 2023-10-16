@@ -14,4 +14,4 @@ test: # run tests
 	poetry run pytest
 
 test-coverage: # form test-coverage report
-	coverage report -m
+	 poetry run pytest --cov
