@@ -20,11 +20,5 @@ To apply it use gendiff file_path1 file_path2 -f format_needed.
 
 ---
 
-### Record - gendiff - first test
-<a href="https://asciinema.org/a/yPXRnbjx6KnP7sLssOsYskNis" target="_blank"><img src="https://asciinema.org/a/yPXRnbjx6KnP7sLssOsYskNis.svg" /></a>
-
-### Record - gendiff - second test
-<a href="https://asciinema.org/a/MBnssnP6eVHy4x5ePZ6a3f6Fk" target="_blank"><img src="https://asciinema.org/a/MBnssnP6eVHy4x5ePZ6a3f6Fk.svg" /></a>
-
-### Record - gendiff - third test (format json)
-<a href="https://asciinema.org/a/rmiKPfYoFmnRbpSud3u7JHC4O" target="_blank"><img src="https://asciinema.org/a/rmiKPfYoFmnRbpSud3u7JHC4O.svg" /></a>
+### Record - gendiff
+<a href="https://asciinema.org/a/nzySMof8OF97HMBfFjY24hGlY" target="_blank"><img src="https://asciinema.org/a/nzySMof8OF97HMBfFjY24hGlY.svg" /></a>

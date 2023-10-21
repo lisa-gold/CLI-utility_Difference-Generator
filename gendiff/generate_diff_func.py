@@ -21,6 +21,7 @@ def fill_dict_for_key(key, type, old, new):
         childern_new = list(new[key].keys())
         children += childern_new
     children = list(set(children))
+    children.sort()
     diff_dict_key = form_dict_for_key(key, type, new[key], old[key], children)
     return diff_dict_key
 
@@ -58,6 +59,7 @@ def fill_diff_dict(k, dict1, dict2, diff_dict):
             diff_dict.update({k: dict_for_key})
             dict_for_key_inner = form_diff_dict(dict1[k], dict2[k])
             diff_dict[k]['children'] = [dict_for_key_inner]
+            diff_dict[k]['children'].sort()
     if k in keys1 and k not in keys2:
         dict_for_key = fill_dict_for_key(k, 'deleted', dict1, {k: None})
         diff_dict.update({k: dict_for_key})
