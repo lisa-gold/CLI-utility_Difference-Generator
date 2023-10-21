@@ -1,6 +1,3 @@
-from gendiff import generate_diff_func
-
-
 def transform_special_values(value):
     if value in [True, False]:
         new_value = str(value).lower()
@@ -11,70 +8,58 @@ def transform_special_values(value):
     return new_value
 
 
-def sort_alph(diff_dict):
-    keys_in_result = list(diff_dict.values())
-    dict_joined = {}
-    for elem in keys_in_result:
-        dict_joined.update(elem)
-    keys_in_result = list(dict_joined.keys())
-    keys_in_result.sort()
-    sorted_dict = {k: dict_joined[k] for k in keys_in_result}
-    return sorted_dict
+def style(diff_dict):
+    string = '{\n'
+    bracket_close = '}'
+    level = 1
+    string += style_inner(diff_dict, level)
+    string += bracket_close
+    return string
 
 
-# Formater - stylish
-def form_line(key, current_dict, symbol, level):
+def style_inner(diff_dict, level):
+    string = ''
+    keys = list(diff_dict.keys())
+    for key in keys:
+        if diff_dict[key]['type'] == 'same':
+            string += form_line(key, diff_dict[key]['new_value'], " ", level)
+        if diff_dict[key]['type'] == 'added':
+            string += form_line(key, diff_dict[key]['new_value'], "+", level)
+        if diff_dict[key]['type'] == 'deleted':
+            string += form_line(key, diff_dict[key]['old_value'], "-", level)
+        if diff_dict[key]['type'] == 'updated':
+            string += form_line_update(key, level, diff_dict)
+    return string
+
+
+def form_line(key, value, symbol, level):
+    line = ''
     bracket = '{'
     bracket_close = '}'
-    line = ''
-    if not isinstance(current_dict, dict):
-        line += f'{"  " * level}{symbol} {key}: {current_dict}\n'
+    value = transform_special_values(value)
+    if not isinstance(value, dict):
+        line += f'{"  " * level}{symbol} {key}: {value}\n'
     else:
         line += f'{"  " * level}{symbol} {key}: {bracket}\n'
         level += 1
-        for k, v in current_dict.items():
+        for k, v in value.items():
             line += form_line(k, v, ' ', level + 1)
         line += f'{"  " * level}{bracket_close}\n'
     return line
 
 
-def style_inner_change(value, key, level):
+def form_line_update(key, level, diff_dict):
+    line = ''
     bracket = '{'
     bracket_close = '}'
-    string = ''
-    if not isinstance(value, dict):
-        v_inner0 = transform_special_values(value[0])
-        v_inner1 = transform_special_values(value[1])
-        string += form_line(key, v_inner0, '-', level)
-        string += form_line(key, v_inner1, '+', level)
+    if isinstance(diff_dict[key]['old_value'], dict) and\
+       isinstance(diff_dict[key]['new_value'], dict):
+        children = diff_dict[key]['children'][0]
+        line += f'{"  " * level}  {key}: {bracket}\n'
+        level += 1
+        line += style_inner(children, level + 1)
+        line += f'{"  " * level}{bracket_close}\n'
     else:
-        string += f'{"  " * level}  {key}: {bracket}\n'
-        inner_style = style(value)[2:-2].replace('\n', f'\n{"  " * level}  ')
-        string += (f'{"  " * level}  '
-                   + inner_style + f'\n{"  " * level}  {bracket_close}\n')
-    return string
-
-
-def allocate_lines(k, v, diff_dict, level):
-    string = ''
-    if k in generate_diff_func.get_no_change(diff_dict).keys():
-        string += form_line(k, v, ' ', level)
-    if k in generate_diff_func.get_add(diff_dict).keys():
-        string += form_line(k, v, '+', level)
-    if k in generate_diff_func.get_sub(diff_dict).keys():
-        string += form_line(k, v, '-', level)
-    if k in generate_diff_func.get_inner_change(diff_dict).keys():
-        string += style_inner_change(v, k, level)
-    return string
-
-
-def style(diff_dict):
-    diff_dict_sorted = sort_alph(diff_dict)
-    bracket_close = '}'
-    string = '{\n'
-    level = 1
-    for k, val in diff_dict_sorted.items():
-        v = transform_special_values(val)
-        string += allocate_lines(k, v, diff_dict, level)
-    string += bracket_close
-    return string
+        line += form_line(key, diff_dict[key]['old_value'], "-", level)
+        line += form_line(key, diff_dict[key]['new_value'], "+", level)
+    return line

@@ -1,5 +1,4 @@
 from gendiff.formatting import stylish
-from gendiff import generate_diff_func
 
 
 # Formater - plain
@@ -21,34 +20,30 @@ def exchange_if_dict(object, value='[complex value]'):
 
 
 def overwrite_keys(key_outer, inner_dict):
-    for key in inner_dict.keys():
-        inner_keys = list(inner_dict[key].keys())
-        for inner_key in inner_keys:
-            new_key = '.'.join([key_outer, inner_key])
-            inner_dict.get(key)[new_key] = inner_dict.get(key).pop(inner_key)
+    inner_keys = list(inner_dict.keys())
+    for inner_key in inner_keys:
+        new_key = '.'.join([key_outer, inner_key])
+        inner_dict[new_key] = inner_dict.pop(inner_key)
 
 
 def style_plain_main(diff_dict):
-    diff_dict_sorted = stylish.sort_alph(diff_dict)
     string = ''
-    for k, val in diff_dict_sorted.items():
-        v = modify_according_to_type(val)
-        if k in generate_diff_func.get_add(diff_dict).keys():
-            v = exchange_if_dict(v)
-            string += f"Property '{k}' was added with value: {v}\n"
-        if k in generate_diff_func.get_sub(diff_dict).keys():
+    for k, val in diff_dict.items():
+        v_new = modify_according_to_type(val['new_value'])
+        v_old = modify_according_to_type(val['old_value'])
+        v_new = exchange_if_dict(v_new)
+        v_old = exchange_if_dict(v_old)
+        if val['type'] == 'added':
+            string += f"Property '{k}' was added with value: {v_new}\n"
+        if val['type'] == 'deleted':
             string += f"Property '{k}' was removed\n"
-        if k in generate_diff_func.get_inner_change(diff_dict).keys():
-            if not isinstance(v, dict):
-                v_inner0 = modify_according_to_type(v[0])
-                v_inner1 = modify_according_to_type(v[1])
-                v_inner0 = exchange_if_dict(v_inner0)
-                v_inner1 = exchange_if_dict(v_inner1)
-                string += (f"Property '{k}' was updated. \
-From {v_inner0} to {v_inner1}\n")
+        if val['type'] == 'updated':
+            if v_old == '[complex value]' and v_new == '[complex value]':
+                overwrite_keys(k, val['children'][0])
+                string += style_plain_main(val['children'][0])
             else:
-                overwrite_keys(k, v)
-                string += style_plain_main(v)
+                string += (f"Property '{k}' was updated. \
+From {v_old} to {v_new}\n")
     return string
 
 
