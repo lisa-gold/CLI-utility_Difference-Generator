@@ -11,4 +11,4 @@ def apply_format(diff, format):
     elif format == 'json':
         return json.style_json(diff)
     else:
-        raise Exception
+        raise Exception('Wrong format! Supported formats: stylish, plain, json')

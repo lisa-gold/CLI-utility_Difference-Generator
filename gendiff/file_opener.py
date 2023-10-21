@@ -9,7 +9,7 @@ def parse_as_dict(content, extension):
     elif extension in ['yml', 'yaml']:
         return yaml.safe_load(content)
     else:
-        raise Exception
+        raise Exception('Wrong extension! Supported exyensions: json, yml, yaml')
 
 
 def open_file(file_path):
