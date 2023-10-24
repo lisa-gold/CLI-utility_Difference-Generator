@@ -13,7 +13,7 @@ def parse_as_dict(content, extension):
             'Wrong extension! Supported extensions: json, yml, yaml')
 
 
-def open_file(file_path):
+def get_content(file_path):
     extension = os.path.splitext(file_path)[-1]
     with open(file_path) as file:
         return parse_as_dict(file, extension[1:])

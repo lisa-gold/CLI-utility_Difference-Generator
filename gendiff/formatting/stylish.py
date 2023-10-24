@@ -21,14 +21,23 @@ def style_inner(diff_dict, level):
     string = ''
     keys = list(diff_dict.keys())
     for key in keys:
-        if diff_dict[key]['type'] == 'same':
+        string += match_type(key, diff_dict, level)
+    return string
+
+
+def match_type(key, diff_dict, level):
+    string = ''
+    match diff_dict[key]['type']:
+        case 'same':
             string += form_line(key, diff_dict[key]['new_value'], " ", level)
-        if diff_dict[key]['type'] == 'added':
+        case 'added':
             string += form_line(key, diff_dict[key]['new_value'], "+", level)
-        if diff_dict[key]['type'] == 'deleted':
+        case 'deleted':
             string += form_line(key, diff_dict[key]['old_value'], "-", level)
-        if diff_dict[key]['type'] == 'updated':
+        case 'updated':
             string += form_line_update(key, level, diff_dict)
+        case 'nested':
+            string += form_line_nested(key, level, diff_dict)
     return string
 
 
@@ -50,16 +59,18 @@ def form_line(key, value, symbol, level):
 
 def form_line_update(key, level, diff_dict):
     line = ''
+    line += form_line(key, diff_dict[key]['old_value'], "-", level)
+    line += form_line(key, diff_dict[key]['new_value'], "+", level)
+    return line
+
+
+def form_line_nested(key, level, diff_dict):
+    line = ''
     bracket = '{'
     bracket_close = '}'
-    if isinstance(diff_dict[key]['old_value'], dict) and\
-       isinstance(diff_dict[key]['new_value'], dict):
-        children = diff_dict[key]['children'][0]
-        line += f'{"  " * level}  {key}: {bracket}\n'
-        level += 1
-        line += style_inner(children, level + 1)
-        line += f'{"  " * level}{bracket_close}\n'
-    else:
-        line += form_line(key, diff_dict[key]['old_value'], "-", level)
-        line += form_line(key, diff_dict[key]['new_value'], "+", level)
+    children = diff_dict[key]['children'][0]
+    line += f'{"  " * level}  {key}: {bracket}\n'
+    level += 1
+    line += style_inner(children, level + 1)
+    line += f'{"  " * level}{bracket_close}\n'
     return line
