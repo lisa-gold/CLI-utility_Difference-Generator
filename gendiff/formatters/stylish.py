@@ -8,21 +8,18 @@ def transform_special_values(value):
     return new_value
 
 
-def style(diff_dict):
-    string = '{\n'
-    bracket_close = '}'
+def build_stylish(diff_dict):
     level = 1
-    string += style_inner(diff_dict, level)
-    string += bracket_close
-    return string
+    lines = build_inner(diff_dict, level)
+    return '{\n' + "\n".join(lines) + '\n}'
 
 
-def style_inner(diff_dict, level):
-    string = ''
+def build_inner(diff_dict, level):
+    line = []
     keys = list(diff_dict.keys())
     for key in keys:
-        string += match_type(key, diff_dict, level)
-    return string
+        line.append(match_type(key, diff_dict, level))
+    return line
 
 
 def match_type(key, diff_dict, level):
@@ -42,35 +39,35 @@ def match_type(key, diff_dict, level):
 
 
 def form_line(key, value, symbol, level):
-    line = ''
+    line = []
     bracket = '{'
     bracket_close = '}'
     value = transform_special_values(value)
     if not isinstance(value, dict):
-        line += f'{"  " * level}{symbol} {key}: {value}\n'
+        line.append(f'{"  " * level}{symbol} {key}: {value}')
     else:
-        line += f'{"  " * level}{symbol} {key}: {bracket}\n'
+        line.append(f'{"  " * level}{symbol} {key}: {bracket}')
         level += 1
         for k, v in value.items():
-            line += form_line(k, v, ' ', level + 1)
-        line += f'{"  " * level}{bracket_close}\n'
-    return line
+            line.append(form_line(k, v, ' ', level + 1))
+        line.append(f'{"  " * level}{bracket_close}')
+    return '\n'.join(line)
 
 
 def form_line_update(key, level, diff_dict):
-    line = ''
-    line += form_line(key, diff_dict[key]['old_value'], "-", level)
-    line += form_line(key, diff_dict[key]['new_value'], "+", level)
-    return line
+    lines = []
+    lines.append(form_line(key, diff_dict[key]['old_value'], "-", level))
+    lines.append(form_line(key, diff_dict[key]['new_value'], "+", level))
+    return '\n'.join(lines)
 
 
 def form_line_nested(key, level, diff_dict):
-    line = ''
+    line = []
     bracket = '{'
     bracket_close = '}'
     children = diff_dict[key]['children'][0]
-    line += f'{"  " * level}  {key}: {bracket}\n'
+    line.append(f'{"  " * level}  {key}: {bracket}')
     level += 1
-    line += style_inner(children, level + 1)
-    line += f'{"  " * level}{bracket_close}\n'
-    return line
+    line.append('\n'.join(build_inner(children, level + 1)))
+    line.append(f'{"  " * level}{bracket_close}')
+    return '\n'.join(line)

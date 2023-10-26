@@ -1,39 +1,28 @@
-from gendiff.file_opener import get_content
-from gendiff.formatting import format
+from gendiff.parser import get_content
+from gendiff.formatters import format
 
 
 def form_diff_dict(dict1, dict2):
-    keys_joined = list(dict1.keys()) + list(dict2.keys())
-    keys_joined.sort()
-    diff_dict = {}
-    for k in keys_joined:
-        fill_diff_dict(k, dict1, dict2, diff_dict)
-    return diff_dict
-
-
-def fill_diff_dict(k, dict1, dict2, diff_dict):
     keys1 = list(dict1.keys())
     keys2 = list(dict2.keys())
     keys_added = set(keys2).difference(keys1)
     keys_deleted = set(keys1).difference(keys2)
-    if k in keys_deleted:
-        dict_for_key = fill_dict_for_key(k, 'deleted', dict1, {k: None})
-        diff_dict.update({k: dict_for_key})
-    elif k in keys_added:
-        dict_for_key = fill_dict_for_key(k, 'added', {k: None}, dict2)
-        diff_dict.update({k: dict_for_key})
-    elif dict1[k] == dict2[k]:
-        dict_for_key = fill_dict_for_key(k, 'same', dict1, dict2)
-        diff_dict.update({k: dict_for_key})
-    elif dict1[k] != dict2[k]:
-        if not isinstance(dict1[k], dict) or not isinstance(dict2[k], dict):
-            dict_for_key = fill_dict_for_key(k, 'updated', dict1, dict2)
+    keys_joined = keys1 + keys2
+    keys_joined.sort()
+    diff_dict = {}
+    for k in keys_joined:
+        if k in keys_deleted:
+            dict_for_key = fill_dict_for_key(k, 'deleted', dict1, {k: None})
             diff_dict.update({k: dict_for_key})
-        else:
-            dict_for_key = fill_dict_for_key(k, 'nested', dict1, dict2)
+        elif k in keys_added:
+            dict_for_key = fill_dict_for_key(k, 'added', {k: None}, dict2)
             diff_dict.update({k: dict_for_key})
-            dict_for_key_inner = form_diff_dict(dict1[k], dict2[k])
-            diff_dict[k]['children'] = [dict_for_key_inner]
+        elif dict1[k] == dict2[k]:
+            dict_for_key = fill_dict_for_key(k, 'same', dict1, dict2)
+            diff_dict.update({k: dict_for_key})
+        elif dict1[k] != dict2[k]:
+            fill_updated(k, dict1, dict2, diff_dict)
+    return diff_dict
 
 
 def fill_dict_for_key(key, type, old, new):
@@ -51,6 +40,17 @@ def fill_dict_for_key(key, type, old, new):
                      'children': children
                      }
     return diff_dict_key
+
+
+def fill_updated(k, dict1, dict2, diff_dict):
+    if not isinstance(dict1[k], dict) or not isinstance(dict2[k], dict):
+        dict_for_key = fill_dict_for_key(k, 'updated', dict1, dict2)
+        diff_dict.update({k: dict_for_key})
+    else:
+        dict_for_key = fill_dict_for_key(k, 'nested', dict1, dict2)
+        diff_dict.update({k: dict_for_key})
+        dict_for_key_inner = form_diff_dict(dict1[k], dict2[k])
+        diff_dict[k]['children'] = [dict_for_key_inner]
 
 
 def generate_diff(file_path1, file_path2, formatting='stylish'):
