@@ -1,5 +1,5 @@
 def transform_special_values(value):
-    if value in [True, False]:
+    if isinstance(value, bool):
         new_value = str(value).lower()
     elif value is None:
         new_value = 'null'
@@ -65,7 +65,7 @@ def form_line_nested(key, level, diff_dict):
     line = []
     bracket = '{'
     bracket_close = '}'
-    children = diff_dict[key]['children'][0]
+    children = diff_dict[key]['children']
     line.append(f'{"  " * level}  {key}: {bracket}')
     level += 1
     line.append('\n'.join(build_inner(children, level + 1)))

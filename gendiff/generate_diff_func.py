@@ -20,19 +20,26 @@ def form_diff_dict(dict1, dict2):
         elif dict1[k] == dict2[k]:
             dict_for_key = fill_dict_for_key(k, 'same', dict1, dict2)
             diff_dict.update({k: dict_for_key})
+        elif isinstance(dict1[k], dict) and isinstance(dict2[k], dict):
+            dict_for_key = fill_dict_for_key(k, 'nested', dict1, dict2)
+            diff_dict.update({k: dict_for_key})
         elif dict1[k] != dict2[k]:
-            fill_updated(k, dict1, dict2, diff_dict)
+            dict_for_key = fill_dict_for_key(k, 'updated', dict1, dict2)
+            diff_dict.update({k: dict_for_key})
     return diff_dict
 
 
 def fill_dict_for_key(key, type, old, new):
-    children = []
-    if isinstance(old[key], dict):
-        children += list(old[key].keys())
-    if isinstance(new[key], dict):
-        children += list(new[key].keys())
-    children = list(set(children))
-    children.sort()
+    if type != 'nested':
+        children = []
+        if isinstance(old[key], dict):
+            children += list(old[key].keys())
+        if isinstance(new[key], dict):
+            children += list(new[key].keys())
+        children = list(set(children))
+        children.sort()
+    else:
+        children = form_diff_dict(old[key], new[key])
     diff_dict_key = {'key': key,
                      'type': type,
                      'new_value': new[key],
@@ -40,17 +47,6 @@ def fill_dict_for_key(key, type, old, new):
                      'children': children
                      }
     return diff_dict_key
-
-
-def fill_updated(k, dict1, dict2, diff_dict):
-    if not isinstance(dict1[k], dict) or not isinstance(dict2[k], dict):
-        dict_for_key = fill_dict_for_key(k, 'updated', dict1, dict2)
-        diff_dict.update({k: dict_for_key})
-    else:
-        dict_for_key = fill_dict_for_key(k, 'nested', dict1, dict2)
-        diff_dict.update({k: dict_for_key})
-        dict_for_key_inner = form_diff_dict(dict1[k], dict2[k])
-        diff_dict[k]['children'] = [dict_for_key_inner]
 
 
 def generate_diff(file_path1, file_path2, formatting='stylish'):
