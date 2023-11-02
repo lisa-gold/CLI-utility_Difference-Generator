@@ -1,5 +1,5 @@
 build:
-	poetry build
+	poetry  build
 
 publish: # публикация пакета без добавления его в  каталог PyPI
 	poetry publish --dry-run

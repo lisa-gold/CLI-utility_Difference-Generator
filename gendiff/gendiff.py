@@ -38,12 +38,16 @@ def fill_dict_for_key(key, type, old, new):
             children += list(new[key].keys())
         children = list(set(children))
         children.sort()
+        new_value = new[key]
+        old_value = old[key]
     else:
         children = form_diff_dict(old[key], new[key])
+        new_value = ''
+        old_value = ''
     diff_dict_key = {'key': key,
                      'type': type,
-                     'new_value': new[key],
-                     'old_value': old[key],
+                     'new_value': new_value,
+                     'old_value': old_value,
                      'children': children
                      }
     return diff_dict_key

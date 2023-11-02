@@ -1,6 +1,6 @@
 import os
 import pytest
-from gendiff.generate_diff_func import generate_diff
+from gendiff.gendiff import generate_diff
 
 
 TESTS_DIR = os.path.dirname(os.path.abspath('gendiff/tests/test_gendiff'))
