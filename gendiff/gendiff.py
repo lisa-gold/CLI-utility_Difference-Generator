@@ -5,52 +5,37 @@ from gendiff.formatters import format
 def form_diff_dict(dict1, dict2):
     keys1 = list(dict1.keys())
     keys2 = list(dict2.keys())
-    keys_added = set(keys2).difference(keys1)
-    keys_deleted = set(keys1).difference(keys2)
-    keys_joined = keys1 + keys2
+    keys_joined = list(set(keys1 + keys2))
     keys_joined.sort()
     diff_dict = {}
     for k in keys_joined:
-        if k in keys_deleted:
-            dict_for_key = fill_dict_for_key(k, 'deleted', dict1, {k: None})
+        if k in set(keys1).difference(keys2):
+            dict_for_key = fill_dict_for_key(k, 'deleted', dict1[k])
             diff_dict.update({k: dict_for_key})
-        elif k in keys_added:
-            dict_for_key = fill_dict_for_key(k, 'added', {k: None}, dict2)
+        elif k in set(keys2).difference(keys1):
+            dict_for_key = fill_dict_for_key(k, 'added', None, dict2[k])
             diff_dict.update({k: dict_for_key})
         elif dict1[k] == dict2[k]:
-            dict_for_key = fill_dict_for_key(k, 'same', dict1, dict2)
+            dict_for_key = fill_dict_for_key(k, 'same', dict1[k], dict2[k])
             diff_dict.update({k: dict_for_key})
         elif isinstance(dict1[k], dict) and isinstance(dict2[k], dict):
-            dict_for_key = fill_dict_for_key(k, 'nested', dict1, dict2)
+            child = form_diff_dict(dict1[k], dict2[k])
+            dict_for_key = fill_dict_for_key(k, 'nested', children=child)
             diff_dict.update({k: dict_for_key})
         elif dict1[k] != dict2[k]:
-            dict_for_key = fill_dict_for_key(k, 'updated', dict1, dict2)
+            dict_for_key = fill_dict_for_key(k, 'updated', dict1[k], dict2[k])
             diff_dict.update({k: dict_for_key})
     return diff_dict
 
 
-def fill_dict_for_key(key, type, old, new):
-    if type != 'nested':
-        children = []
-        if isinstance(old[key], dict):
-            children += list(old[key].keys())
-        if isinstance(new[key], dict):
-            children += list(new[key].keys())
-        children = list(set(children))
-        children.sort()
-        new_value = new[key]
-        old_value = old[key]
-    else:
-        children = form_diff_dict(old[key], new[key])
-        new_value = ''
-        old_value = ''
-    diff_dict_key = {'key': key,
-                     'type': type,
-                     'new_value': new_value,
-                     'old_value': old_value,
-                     'children': children
-                     }
-    return diff_dict_key
+def fill_dict_for_key(key, type, old_value=None, new_value=None, children={}):
+    return {
+            'key': key,
+            'type': type,
+            'new_value': new_value,
+            'old_value': old_value,
+            'children': children
+            }
 
 
 def generate_diff(file_path1, file_path2, formatting='stylish'):

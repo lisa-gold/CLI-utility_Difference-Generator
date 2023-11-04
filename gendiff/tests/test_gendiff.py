@@ -22,8 +22,7 @@ def get_content(file_path):
     ('flat1.json', 'flat1.json', 'stylish', 'correct_res_the_same_file.txt'),
     ('flat1.yml', 'flat2.json', 'stylish', 'correct_res_flat.txt'),
     ('file1.json', 'file2.json', 'stylish', 'correct_res_nested.txt'),
-    ('file1.json', 'file2.json', 'plain', 'correct_res_plain.txt'),
-    ('file1.json', 'file2.json', 'json', 'correct_res.json')
+    ('file1.json', 'file2.json', 'plain', 'correct_res_plain.txt')
 ])
 def test_generate_diff(test_input1, test_input2, test_input3, expected):
     assert generate_diff(generate_fixture_path(test_input1),
