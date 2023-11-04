@@ -29,8 +29,7 @@ def form_diff_dict(dict1, dict2):
 
 
 def fill_dict_for_key(key, type, old_value=None, new_value=None, children={}):
-    return {
-            'key': key,
+    return {'key': key,
             'type': type,
             'new_value': new_value,
             'old_value': old_value,
